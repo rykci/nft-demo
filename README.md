@@ -15,6 +15,11 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Environment Variables
+- `MCP_API`: the api endpoint
+- `NFT_CONTRACT`: the address of the nft contract
+
+
 ## How it works
 
 1. Create Web3 Instance. Connect your Metamask wallet.
