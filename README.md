@@ -7,9 +7,10 @@ If you do not already have node installed, [Download and install node](https://n
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependancies, then run the development server:
 
 ```bash
+npm install
 npm run dev
 ```
 
