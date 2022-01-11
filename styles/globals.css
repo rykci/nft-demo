@@ -14,3 +14,33 @@ a {
 * {
   box-sizing: border-box;
 }
+
+td {
+  text-align: center;
+  text-overflow: ellipsis;
+}
+
+.main {
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+.container {
+  margin: 1rem 0;
+  min-width: 100vw;
+  background-color: whitesmoke;
+  overflow: scroll;
+}
+
+.account-text {
+  margin-top: 1rem;
+  padding-left: 2rem;
+}
+
+.modal-body {
+  overflow: hidden;
+}
+
+.opensea-modal {
+  text-align: center;
+}
