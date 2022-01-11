@@ -30,7 +30,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    `new web3.eth.Contract(abi, contract_address, {from: user_address, gas: 9999999 })`
 4. Files that have payment will also have mint button \
    !['mint button picture'](./readme/1.png)
-5. When you click the MINT button:
+5. When you click the MINT button: Call `prepNft()` function
    1. Create nft object template: \
       To get ipfs_url and tx_hash you may need the
       `storage/deal/detail/` API and \
@@ -47,7 +47,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    2. Then Modal should appear for the user to edit the name and description, updates here \
       should also update the nft object.\
       !['nft edit modal picture'](./readme/2.png)
-6. When the user clicked the 'Mint NFT' button in this model
+6. When the user clicked the 'Mint NFT' button in this model: Call `handleMint()`
    1. Show Loading screen..
    2. Upload the nft object to MCP as JSON file
    3. This upload should have `ipfs_url` in the response
