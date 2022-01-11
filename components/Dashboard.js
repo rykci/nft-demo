@@ -9,13 +9,13 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
-import mintContractAbi from '../abi/DatabaseMinter.json'
+import nftContractAbi from '../abi/DatabaseMinter.json'
 
 export default function Dashboard({ web3, address }) {
   const [files, setFiles] = useState([])
   const [minting, setMinting] = useState(false)
   const [isLoading, setLoading] = useState(false)
-  const [mintContract, setMintContract] = useState()
+  const [nftContract, setMintContract] = useState()
   const [nftHash, setNftHash] = useState('')
   const [tokenId, setTokenId] = useState(0)
   const [openseaModal, setOpenseaModal] = useState(false)
@@ -35,7 +35,7 @@ export default function Dashboard({ web3, address }) {
     // load mint contract
     setMintContract(
       new web3.eth.Contract(
-        mintContractAbi,
+        nftContractAbi,
         process.env.NEXT_PUBLIC_MINT_CONTRACT,
         { from: address, gas: 9999999 },
       ),
@@ -84,13 +84,13 @@ export default function Dashboard({ web3, address }) {
     const nftUrl = metadataUploadResponse.data.ipfs_url
 
     // mint nft
-    const transaction = await mintContract.methods
+    const transaction = await nftContract.methods
       .mintData(address, nftUrl)
       .send()
     setNftHash(transaction.transactionHash)
 
     // get nft token id
-    const tokenID = await mintContract.methods.totalSupply().call()
+    const tokenID = await nftContract.methods.totalSupply().call()
     setTokenId(tokenID)
 
     setLoading(false)

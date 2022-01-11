@@ -47,5 +47,3 @@ export const uploadFile = async (
     console.error(err)
   }
 }
-
-/////// mint api
