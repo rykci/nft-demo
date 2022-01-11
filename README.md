@@ -51,13 +51,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    1. Show Loading screen..
    2. Upload the nft object to MCP as JSON file
    3. This upload should have `ipfs_url` in the response
-   4. Send `mintData(user_Address, ipfs_url)` from the smart contract
+   4. Send `mintData(user_Address, ipfs_url)` from the smart contract 
    ```
    const tx = await nftContract.methods
      .mintData(address, nftUrl)
      .send()
-   ```
-   This should trigger Metamask on the UI for approval.
+   ``` 
+   5. This should trigger Metamask on the UI for approval.
    5. store the transaction hash `tx.transaction_hash`
    6. store the nft token id by calling `totalSuppy()`
    ```
