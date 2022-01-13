@@ -30,6 +30,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    `new web3.eth.Contract(abi, contract_address, {from: user_address, gas: 9999999 })`
 4. Files that have payment will also have mint button \
    !['mint button picture'](./readme/1.png)
+   1. If the file has mint information already (token_id/nft_tx_hash/min_address) show view button instead
 5. When you click the MINT button: Call `prepNft()` function
    1. Create nft object template: \
       To get ipfs_url and tx_hash you may need the
@@ -63,10 +64,11 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    ```
    const tokenID = await nftContract.methods.totalSupply().call()
    ```
-   7. Now the Modal should close and open another Modal
+   7. Now the Modal should close and open another Modal (opensea modal, clicking view button will also open this modal)
 7. This modal should show the transaction hash, link to mumbai polygonscan, and link to opensea \
-   `https://testnets.opensea.io/assets/mumbai/<CONTRACT_ADDRESS>/<TOKEN_ID>`\
-    !['nft mint response picture'](./readme/3.png)
+   `https://testnets.opensea.io/assets/mumbai/<MINT_ADDRESS>/<TOKEN_ID>`\
+    !['nft mint response picture'](./readme/3.png) \
+   (this mint address should be from the get deals response)
 
 ## Extra Resources
 
