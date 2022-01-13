@@ -4,6 +4,7 @@ import {
   getTxHash,
   getFileDetails,
   uploadFile,
+  postMintInfo,
 } from '../pages/api/uploadedFiles'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
@@ -16,9 +17,11 @@ export default function Dashboard({ web3, address }) {
   const [minting, setMinting] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [nftContract, setMintContract] = useState()
+  const [viewAddress, setViewAddress] = useState('')
   const [nftHash, setNftHash] = useState('')
   const [tokenId, setTokenId] = useState(0)
   const [openseaModal, setOpenseaModal] = useState(false)
+  const [payloadCid, setPayloadCid] = useState('')
   const [nft, setNft] = useState({
     name: '',
     description: '',
@@ -62,6 +65,16 @@ export default function Dashboard({ web3, address }) {
       tx_hash: txHash,
       attributes: [{ trait_type: 'Size', value: parseInt(file.file_size) }],
     })
+
+    setPayloadCid(file.payload_cid)
+  }
+
+  // when user clicks 'VIEW' button, set up hash and opensea link
+  const prepOpensea = (tx_hash, id, address) => {
+    setNftHash(tx_hash)
+    setTokenId(id)
+    setViewAddress(address)
+    setOpenseaModal(true)
   }
 
   // when user clicks 'MINT NFT'
@@ -84,19 +97,31 @@ export default function Dashboard({ web3, address }) {
     const nftUrl = metadataUploadResponse.data.ipfs_url
 
     // mint nft
-    const transaction = await nftContract.methods
-      .mintData(address, nftUrl)
-      .send()
-    setNftHash(transaction.transactionHash)
+    try {
+      const transaction = await nftContract.methods
+        .mintData(address, nftUrl)
+        .send()
 
-    // get nft token id
-    const tokenID = await nftContract.methods.totalSupply().call()
-    setTokenId(tokenID)
+      // get nft token id
+      const tokenID = await nftContract.methods.totalSupply().call()
 
-    setLoading(false)
-    setMinting(false)
-    // opensea modal will show tx_hash and opensea link
-    setOpenseaModal(true)
+      await postMintInfo(
+        payloadCid,
+        transaction.transactionHash,
+        tokenID,
+        nftContract._address,
+      )
+
+      setLoading(false)
+      setMinting(false)
+      // opensea modal will show tx_hash and opensea link
+      prepOpensea(transaction.transactionHash, tokenID, nftContract._address)
+    } catch (err) {
+      console.error(err)
+      console.log('minting error')
+      setLoading(false)
+      setMinting(false)
+    }
   }
 
   return (
@@ -147,15 +172,30 @@ export default function Dashboard({ web3, address }) {
                   </td>
                   <td>
                     {file.status != 'Pending' ? (
-                      <Button
-                        variant="primary"
-                        onClick={async () => {
-                          await prepNft(file)
-                          setMinting(true)
-                        }}
-                      >
-                        MINT
-                      </Button>
+                      file.token_id ? (
+                        <Button
+                          variant="primary"
+                          onClick={async () => {
+                            prepOpensea(
+                              file.nft_tx_hash,
+                              file.token_id,
+                              file.mint_address,
+                            )
+                          }}
+                        >
+                          VIEW
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="primary"
+                          onClick={async () => {
+                            await prepNft(file)
+                            setMinting(true)
+                          }}
+                        >
+                          MINT
+                        </Button>
+                      )
                     ) : (
                       <></>
                     )}
@@ -190,7 +230,7 @@ export default function Dashboard({ web3, address }) {
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formTxHash">
-              <Form.Label>Data CID</Form.Label>
+              <Form.Label>IPFS URL</Form.Label>
               <Form.Control type="text" readOnly value={nft.image} />
             </Form.Group>
             <Form.Group className="mb-3" controlId="formTxHash">
@@ -237,7 +277,7 @@ export default function Dashboard({ web3, address }) {
             </a>
           </div>
           <a
-            href={`https://testnets.opensea.io/assets/mumbai/${process.env.NEXT_PUBLIC_MINT_CONTRACT}/${tokenId}`}
+            href={`https://testnets.opensea.io/assets/mumbai/${viewAddress}/${tokenId}`}
             target="_blank"
             rel="noreferrer noopener"
           >

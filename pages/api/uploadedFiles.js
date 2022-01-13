@@ -47,3 +47,21 @@ export const uploadFile = async (
     console.error(err)
   }
 }
+
+export const postMintInfo = async (
+  payload_cid,
+  tx_hash,
+  token_id,
+  mint_address,
+) => {
+  try {
+    axios.post(`${process.env.NEXT_PUBLIC_MCP_API}storage/mint/info`, {
+      payload_cid,
+      tx_hash,
+      token_id,
+      mint_address,
+    })
+  } catch (err) {
+    console.err(err)
+  }
+}
