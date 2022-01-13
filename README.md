@@ -7,13 +7,19 @@ If you do not already have node installed, [Download and install node](https://n
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependancies, then run the development server:
 
 ```bash
+npm install
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Environment Variables
+- `MCP_API`: the api endpoint
+- `NFT_CONTRACT`: the address of the nft contract
+
 
 ## How it works
 
@@ -24,7 +30,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    `new web3.eth.Contract(abi, contract_address, {from: user_address, gas: 9999999 })`
 4. Files that have payment will also have mint button \
    !['mint button picture'](./readme/1.png)
-5. When you click the MINT button:
+5. When you click the MINT button: Call `prepNft()` function
    1. Create nft object template: \
       To get ipfs_url and tx_hash you may need the
       `storage/deal/detail/` API and \
@@ -41,17 +47,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
    2. Then Modal should appear for the user to edit the name and description, updates here \
       should also update the nft object.\
       !['nft edit modal picture'](./readme/2.png)
-6. When the user clicked the 'Mint NFT' button in this model
+6. When the user clicked the 'Mint NFT' button in this model: Call `handleMint()`
    1. Show Loading screen..
    2. Upload the nft object to MCP as JSON file
    3. This upload should have `ipfs_url` in the response
-   4. Send `mintData(user_Address, ipfs_url)` from the smart contract
+   4. Send `mintData(user_Address, ipfs_url)` from the smart contract 
    ```
    const tx = await nftContract.methods
      .mintData(address, nftUrl)
      .send()
-   ```
-   This should trigger Metamask on the UI for approval.
+   ``` 
+   5. This should trigger Metamask on the UI for approval.
    5. store the transaction hash `tx.transaction_hash`
    6. store the nft token id by calling `totalSuppy()`
    ```
